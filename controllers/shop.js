@@ -1,35 +1,40 @@
 const Product = require('../models/product');
 const cart=require('../models/cart');
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll.then(([rows,fielddata])=>{
+  Product.findAll().then(products=>{
     res.render('shop/product-list', {
-      prods: rows,
+      prods: products,
       pageTitle: 'All products',
       path: '/products'
     
   });
 
   }).catch(err=>console.log(err));
-    
 };
 exports.getProduct=(req,res,next)=>{
   const proid=req.params.productid;
-  Product.fetchFindById(proid).then(([product])=>{
+  /*Product.findAll({where:{id:proid}}).then(product=>{
     res.redirect('shop/product-detail',
     {product:product[0],
+      pageTitle:produc[0].ttitle,
+      path:'/products'});
+  }).catch(err=>console.log(err));*/
+  Product.findById(proid).then((product)=>{
+    res.redirect('shop/product-detail',
+    {product:product,
       pageTitle:producttitle,
       path:'/products'});
   })
 
-  .catch(err=>console.log(err))
+  .catch(err=>console.log(err));
     
 };
 
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll.then(([rows,fielddata])=>{
+  Product.findAll().then(products=>{
     res.render('shop/index', {
-      prods: rows,
+      prods: products,
       pageTitle: 'Shop',
       path: '/'
     
